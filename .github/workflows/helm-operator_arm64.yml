@@ -17,7 +17,8 @@ jobs:
         git clone https://github.com/fluxcd/helm-operator.git repo
         cd repo
         git checkout ${GIT_BRANCH}
-        sed -i 's|docker.io/fluxcd/|docker.io/huettner94/|g' Makefile
+        sed -i 's|docker.io/fluxcd/\$\* -t docker.io/fluxcd/|docker.io/huettner94/|g' Makefile
+        sed -i 's|\$(IMAGE_TAG)|$(IMAGE_TAG)-arm64|g' Makefile
         sed -i 's|docker build|docker buildx build --push --platform linux/arm64|' Makefile
         docker login --username ${REGISTRY_USERNAME} --password ${REGISTRY_PASSWORD}
         make ARCH=arm64

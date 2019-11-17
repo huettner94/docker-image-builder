@@ -1,0 +1,28 @@
+name: fluxcd/flux
+
+on: [push]
+
+jobs:
+  arm64:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v1
+    - name: Set up Docker Buildx
+      id: buildx
+      uses: crazy-max/ghaction-docker-buildx@v1
+      with:
+        version: latest
+    - name: Build
+      run: |
+        git clone https://github.com/fluxcd/flux.git repo
+        cd repo
+        git checkout ${GIT_BRANCH}
+        sed -i 's|docker.io/fluxcd/\$\* -t docker.io/fluxcd/|docker.io/huettner94/|g' Makefile
+        sed -i 's|\$(IMAGE_TAG)|$(IMAGE_TAG)-arm64|g' Makefile
+        sed -i 's|docker build|docker buildx build --push --platform linux/arm64|' Makefile
+        docker login --username ${REGISTRY_USERNAME} --password ${REGISTRY_PASSWORD}
+        make ARCH=arm64
+      env:
+        REGISTRY_USERNAME: ${{ secrets.DOCKERHUB_USERNAME }}
+        REGISTRY_PASSWORD: ${{ secrets.DOCKERHUB_PASSWORD }}
+        GIT_BRANCH: 1.15.0

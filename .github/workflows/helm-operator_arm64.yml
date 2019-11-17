@@ -1,0 +1,23 @@
+name: fluxcd/helm-operator
+
+on: [push]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v1
+    - name: Build
+      run: |
+        git clone https://github.com/fluxcd/helm-operator.git repo
+        cd repo
+        git checkout $(git describe --tags)
+        sed -i 's|docker.io/fluxcd/|docker.io/huettner94/|g' Makefile
+        make ARCH=arm64
+        docker login --username ${REGISTRY_USERNAME} --password ${REGISTRY_PASSWORD}
+        for i in $(docker image list | grep huettner94 | grep -v "<none>" | awk '{print $1 ":" $2}'); do
+          docker image push "$i"
+        done
+      env:
+        REGISTRY_USERNAME: ${{ secrets.DOCKERHUB_USERNAME }}
+        REGISTRY_PASSWORD: ${{ secrets.DOCKERHUB_PASSWORD }}

@@ -20,6 +20,7 @@ jobs:
         sed -i 's|docker.io/fluxcd/\$\* -t docker.io/fluxcd/|docker.io/huettner94/|g' Makefile
         sed -i 's|\$(IMAGE_TAG)|$(IMAGE_TAG)-arm64|g' Makefile
         sed -i 's|docker build|docker buildx build --push --platform linux/arm64|' Makefile
+        sed -i "s|-X main.version=\$(shell ./docker/image-tag)|-X 'main.version=\$(shell ./docker/image-tag)'|" Makefile
         docker login --username ${REGISTRY_USERNAME} --password ${REGISTRY_PASSWORD}
         make ARCH=arm64
       env:

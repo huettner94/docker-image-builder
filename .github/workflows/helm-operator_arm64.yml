@@ -18,12 +18,9 @@ jobs:
         cd repo
         git checkout ${GIT_BRANCH}
         sed -i 's|docker.io/fluxcd/|docker.io/huettner94/|g' Makefile
-        sed -i 's|docker build|docker buildx build --platform linux/arm64|' Makefile
-        make ARCH=arm64
+        sed -i 's|docker build|docker buildx build --push --platform linux/arm64|' Makefile
         docker login --username ${REGISTRY_USERNAME} --password ${REGISTRY_PASSWORD}
-        for i in $(docker image list | grep huettner94 | grep -v "<none>" | awk '{print $1 ":" $2}'); do
-          docker image push "$i"
-        done
+        make ARCH=arm64
       env:
         REGISTRY_USERNAME: ${{ secrets.DOCKERHUB_USERNAME }}
         REGISTRY_PASSWORD: ${{ secrets.DOCKERHUB_PASSWORD }}

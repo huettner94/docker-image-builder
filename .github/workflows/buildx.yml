@@ -1,0 +1,27 @@
+name: fluxcd/helm-operator
+
+on: [push]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v1
+    - name: Checkout Repo
+      run: |
+        git clone https://github.com/fluxcd/helm-operator.git
+        cd helm-operator
+        git checkout $(git describe --tags)
+    - name: Run Buildx
+      run: |
+        make ARCH=ARM64
+#        TAGNAME=$(if [[ "${GITHUB_REF}" == "refs/heads/master" ]]; then echo "latest"; else echo "${GITHUB_REF}" | sed -e 's|refs/[a-z]*/||'; fi)
+#        docker login --username ${REGISTRY_USERNAME} --password ${REGISTRY_PASSWORD}
+#        docker buildx build \
+#        --platform linux/386,linux/amd64,linux/arm/v6,linux/arm/v7,linux/arm64 \
+#        --output "type=image,push=true" \
+#        --tag "huettner94/recipiebook:${TAGNAME}" \
+#        --file Dockerfile .
+#      env:
+#        REGISTRY_USERNAME: ${{ secrets.DOCKERHUB_USERNAME }}
+#        REGISTRY_PASSWORD: ${{ secrets.DOCKERHUB_PASSWORD }}

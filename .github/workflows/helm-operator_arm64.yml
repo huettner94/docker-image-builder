@@ -3,7 +3,7 @@ name: fluxcd/helm-operator
 on: [push]
 
 jobs:
-  build:
+  arm64:
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v1

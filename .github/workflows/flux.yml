@@ -27,4 +27,4 @@ jobs:
       env:
         REGISTRY_USERNAME: ${{ secrets.DOCKERHUB_USERNAME }}
         REGISTRY_PASSWORD: ${{ secrets.DOCKERHUB_PASSWORD }}
-        GIT_BRANCH: 1.15.0
+        GIT_BRANCH: 1.19.0

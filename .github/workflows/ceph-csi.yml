@@ -1,6 +1,9 @@
 name: ceph/ceph-csi
 
-on: [push]
+on:
+  push:
+    paths:
+      - '.github/workflows/ceph-csi.yml'
 
 jobs:
   arm64:

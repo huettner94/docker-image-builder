@@ -1,6 +1,9 @@
 name: fluxcd/flux
 
-on: [push]
+on:
+  push:
+    paths:
+      - '.github/workflows/flux.yml'
 
 jobs:
   arm64:

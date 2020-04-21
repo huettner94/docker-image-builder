@@ -1,6 +1,9 @@
 name: fluxcd/helm-operator
 
-on: [push]
+on:
+  push:
+    paths:
+      - '.github/workflows/helm-operator.yml'
 
 jobs:
   arm64:

@@ -23,7 +23,7 @@ jobs:
         git tag -d ${GIT_BRANCH} || true # I know this is stupid, but why are there two tags here :)
         sed -i 's|tag \$(CSI_IMAGE)|tag $(CSI_IMAGE) docker.io/huettner94/|g' Makefile
         sed -i 's|\$(CONTAINER_CMD) build|docker buildx build --platform linux/arm64|' Makefile
-        rm -rf ./vendor
+        sed -i 's|google.golang.org/grpc v1.26.0|google.golang.org/grpc v1.27.0|' go.mod
         docker login --username ${REGISTRY_USERNAME} --password ${REGISTRY_PASSWORD}
         make ARCH=arm64 GOARCH=arm64
       env:

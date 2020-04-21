@@ -17,6 +17,9 @@ jobs:
         version: latest
     - name: Build
       run: |
+        go version
+        go env
+        go tool dist list
         git clone https://github.com/ceph/ceph-csi.git repo
         cd repo
         git checkout ${GIT_BRANCH}

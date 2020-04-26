@@ -22,7 +22,7 @@ jobs:
         git checkout ${GIT_BRANCH}
         git tag -d v${GIT_BRANCH} || true # I know this is stupid, but why are there two tags here :)
         docker login --username ${REGISTRY_USERNAME} --password ${REGISTRY_PASSWORD}
-        docker buildx build -t "docker.io/huettner94/bitnami-mariadb:${GIT_BRANCH}" --push --platform linux/arm64
+        docker buildx build -t "docker.io/huettner94/bitnami-mariadb:${GIT_BRANCH}" --push --platform linux/arm64 Dockerfile
       env:
         REGISTRY_USERNAME: ${{ secrets.DOCKERHUB_USERNAME }}
         REGISTRY_PASSWORD: ${{ secrets.DOCKERHUB_PASSWORD }}

@@ -1,0 +1,29 @@
+name: bitnami/owncloud
+
+on:
+  push:
+    paths:
+      - '.github/workflows/bitnami-owncloud.yml'
+
+jobs:
+  arm64:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v1
+    - name: Set up Docker Buildx
+      id: buildx
+      uses: crazy-max/ghaction-docker-buildx@v1
+      with:
+        version: latest
+    - name: Build
+      run: |
+        git clone https://github.com/bitnami/bitnami-docker-owncloud.git repo
+        cd repo/10/debian-10/
+        git checkout ${GIT_BRANCH}
+        git tag -d v${GIT_BRANCH} || true # I know this is stupid, but why are there two tags here :)
+        docker login --username ${REGISTRY_USERNAME} --password ${REGISTRY_PASSWORD}
+        docker buildx build -t "docker.io/huettner94/bitnami-owncloud:${GIT_BRANCH}" --push --platform linux/arm64 .
+      env:
+        REGISTRY_USERNAME: ${{ secrets.DOCKERHUB_USERNAME }}
+        REGISTRY_PASSWORD: ${{ secrets.DOCKERHUB_PASSWORD }}
+        GIT_BRANCH: 10.4.1-debian-10-r3
